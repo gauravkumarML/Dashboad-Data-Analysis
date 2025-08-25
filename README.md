@@ -1,7 +1,8 @@
 # Analytics App — E‑commerce + Subscriptions
 
 End‑to‑end analytics app (Power BI style) built with **Streamlit + Plotly**. It consumes the CSV dataset we generated earlier and reproduces KPIs like MRR/ARR, churn, revenue vs. budget, CAC/ROAS, and cohort retention.
-
+![Screenshot 2025-08-25 at 17.48.48.png](data/Screenshot%202025-08-25%20at%2017.48.48.png)
+![Screenshot 2025-08-25 at 17.49.15.png](data/Screenshot%202025-08-25%20at%2017.49.15.png)
 ##  Project Structure
 ```
 streamlit_power_analytics_app/

@@ -8,10 +8,6 @@ from datetime import datetime
 from src.utils import typed_read_csv, add_datekey_month, revenue_from_sales, cost_from_sales, ensure_datetime, cohort_retention, yoy
 
 st.set_page_config(page_title="E‑commerce & Subscriptions Analytics", layout="wide")
-
-# ------------------------------
-# Data loading
-# ------------------------------
 DATA_DIR = os.environ.get("APP_DATA_DIR", os.path.join(os.path.dirname(__file__), "data"))
 
 @st.cache_data(show_spinner=False)
@@ -38,7 +34,7 @@ def load_all(data_dir: str):
 
 dfs = load_all(DATA_DIR)
 
-# Basic typing
+
 dfs["DimDate"]["Date"] = pd.to_datetime(dfs["DimDate"]["Date"], errors="coerce")
 for c in ["StartDate","EndDate"]:
     if c in dfs["FactSubscriptions"]:
@@ -49,10 +45,10 @@ dfs["DimDate"]["DateKeyMonth"] = dfs["DimDate"]["Date"].dt.year * 10000 + dfs["D
 if "DateKey" not in dfs["FactBudget"] and "DateKey" in dfs["FactBudget"]:
     pass
 else:
-    # ensure FactBudget DateKey is int-like (YYYYMM01)
+
     dfs["FactBudget"]["DateKey"] = dfs["FactBudget"]["DateKey"].astype(int)
 
-# Join helpers
+
 dim_date = dfs["DimDate"]
 dim_geo = dfs["DimGeo"]
 dim_channel = dfs["DimChannel"]
@@ -82,9 +78,7 @@ budget = fact_budget.merge(dim_channel[["ChannelID","ChannelName"]], on="Channel
 web = fact_web.merge(dim_date[["DateKey","Date","Year","Month","MonthIdx"]], on="DateKey", how="left") \
               .merge(dim_channel[["ChannelID","ChannelName","Type"]], on="ChannelID", how="left")
 
-# ------------------------------
-# Sidebar filters
-# ------------------------------
+
 st.sidebar.header("Filters")
 min_date = pd.to_datetime(dim_date["Date"].min())
 max_date = pd.to_datetime(dim_date["Date"].max())
@@ -96,7 +90,7 @@ sel_segments = st.sidebar.multiselect("Segments", sorted(dim_customer["Segment"]
 
 discount_extra = st.sidebar.slider("What‑If extra discount (%)", min_value=0.0, max_value=20.0, value=0.0, step=0.5) / 100.0
 
-# Apply filters
+# filters
 mask = (sales["Date"] >= pd.to_datetime(date_range[0])) & (sales["Date"] <= pd.to_datetime(date_range[1]))
 if sel_channels:
     mask &= sales["ChannelName"].isin(sel_channels)
@@ -107,27 +101,26 @@ if sel_segments:
 
 sales_f = sales.loc[mask].copy()
 
-# Apply What‑If discount
+# What‑If discount
 if discount_extra > 0:
     sales_f["RevenueAdj"] = (sales_f["Qty"] * sales_f["UnitPrice"] * (1 - (sales_f["Discount"] + discount_extra)).clip(lower=0))
 else:
     sales_f["RevenueAdj"] = sales_f["Revenue"]
 
-# ------------------------------
+
 # KPIs
-# ------------------------------
 rev = sales_f["RevenueAdj"].sum()
 cost = sales_f["CostAmt"].sum()
 gm = rev - cost
 gm_pct = (gm / rev) if rev else 0.0
 
-# MRR/ARR (use subscription lines in selected period, group by month and take last)
+# MRR/ARR
 sub_lines = sales_f[sales_f["IsSubscription"] == 1]
 mrr = sub_lines.groupby(pd.Grouper(key="Date", freq="M"))["RevenueAdj"].sum().rename("MRR")
 curr_mrr = float(mrr.iloc[-1]) if len(mrr) else 0.0
 arr = curr_mrr * 12.0
 
-# Subscriptions (Active, New, Churned in current month end)
+# Subscriptions
 subs = fact_subs.copy()
 subs["StartDate"] = pd.to_datetime(subs["StartDate"], errors="coerce")
 subs["EndDate"] = pd.to_datetime(subs["EndDate"], errors="coerce")
@@ -138,10 +131,9 @@ new_count = subs[(subs["StartDate"].dt.to_period("M") == curr_day.to_period("M")
 churned_count = subs[(subs["EndDate"].notna()) & (subs["EndDate"].dt.to_period("M") == curr_day.to_period("M"))]["CustomerID"].nunique()
 churn_rate = churned_count / max(active_count + churned_count - new_count, 1)
 
-# ------------------------------
+
 # Layout
-# ------------------------------
-st.title("📊 E‑commerce & Subscriptions Analytics (Streamlit)")
+st.title("E‑commerce & Subscriptions Analytics")
 
 # KPI row
 kpi_cols = st.columns(6)
@@ -157,9 +149,8 @@ tab_trend, tab_product, tab_marketing, tab_budget, tab_cohort, tab_quality = st.
     ["Trends", "Product & Margin", "Marketing", "Budget vs Actual", "Cohort Retention", "Data Quality"]
 )
 
-# ------------------------------
+
 # Trends
-# ------------------------------
 with tab_trend:
     st.subheader("Revenue trend")
     ts = sales_f.groupby(pd.Grouper(key="Date", freq="M")).agg(Revenue=("RevenueAdj","sum"))
@@ -176,9 +167,8 @@ with tab_trend:
         fig2.update_yaxes(tickformat=".1%")
         st.plotly_chart(fig2, use_container_width=True)
 
-# ------------------------------
+
 # Product & Margin
-# ------------------------------
 with tab_product:
     st.subheader("Revenue and GM% by Category / Subcategory")
     ag = sales_f.groupby(["Category","Subcategory"], as_index=False).agg(
@@ -199,16 +189,16 @@ with tab_product:
     fig2.update_layout(xaxis_tickangle=45, height=450)
     st.plotly_chart(fig2, use_container_width=True)
 
-# ------------------------------
+
 # Marketing
-# ------------------------------
 with tab_marketing:
     st.subheader("Sessions, Conversions, Spend")
     web_f = web.copy()
     if sel_channels:
         web_f = web_f[web_f["ChannelName"].isin(sel_channels)]
     web_f = web_f[(web_f["Date"] >= pd.to_datetime(date_range[0])) & (web_f["Date"] <= pd.to_datetime(date_range[1]))]
-    kpis = web_f.agg(Sessions=("Sessions","sum"), Conversions=("Conversions","sum"), Spend=("Spend","sum"))
+    #kpis = web_f.agg(Sessions=("Sessions","sum"), Conversions=("Conversions","sum"), Spend=("Spend","sum"))
+    kpis = web_f[["Sessions", "Conversions", "Spend"]].sum(numeric_only=True)
     colA, colB, colC, colD, colE = st.columns(5)
     colA.metric("Sessions", f"{int(kpis['Sessions']):,}")
     colB.metric("Conversions", f"{int(kpis['Conversions']):,}")
@@ -234,9 +224,8 @@ with tab_marketing:
     fig = px.scatter(ch_ag, x="Sessions", y="Revenue", size="Spend", color="ChannelName", hover_data=["ROAS"])
     st.plotly_chart(fig, use_container_width=True)
 
-# ------------------------------
+
 # Budget vs Actual
-# ------------------------------
 with tab_budget:
     st.subheader("Variance to Budget (Monthly)")
     # Build monthly revenue by Category+Channel
@@ -258,9 +247,8 @@ with tab_budget:
     fig = px.bar(show, x="Month", y="VarToBudget", color="Category", barmode="group", hover_data=["ChannelName","Revenue","BudgetRevenue","Var%"])
     st.plotly_chart(fig, use_container_width=True)
 
-# ------------------------------
+
 # Cohort Retention
-# ------------------------------
 with tab_cohort:
     st.subheader("Subscription Cohort Retention")
     date_index = pd.date_range(min_date, max_date, freq="M")
@@ -273,9 +261,8 @@ with tab_cohort:
         fig.update_yaxes(ticktext=[d.strftime("%Y-%m") for d in ret.index], tickvals=list(range(len(ret.index))))
         st.plotly_chart(fig, use_container_width=True)
 
-# ------------------------------
+
 # Data Quality
-# ------------------------------
 with tab_quality:
     st.subheader("Data Quality & Refresh")
     qc = []

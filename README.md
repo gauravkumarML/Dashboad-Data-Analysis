@@ -16,7 +16,7 @@ streamlit_power_analytics_app/
 ##  Run locally
 ```bash
 pip install -r requirements.txt
-# Option A: CSVs in ./data
+
 streamlit run streamlit_app.py
 
 ```

@@ -2,7 +2,7 @@
 
 A production-grade analytics application designed to deliver real-time insights into E-commerce performance, subscription metrics, and improved forecasting accuracy. Built with a focus on engineering rigor, scalability, and data storytelling.
 
-![Deployed here]((https://huggingface.co/spaces/gauravkumarML/Dashboad-Data-Analysis))
+![Deployed here]([https://huggingface.co/spaces/gauravkumarML/Dashboad-Data-Analysis](https://huggingface.co/spaces/gauravkumarML/Dashboad-Data-Analysis))
 
 ---
 

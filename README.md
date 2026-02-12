@@ -2,7 +2,7 @@
 
 A production-grade analytics application designed to deliver real-time insights into E-commerce performance, subscription metrics, and improved forecasting accuracy. Built with a focus on engineering rigor, scalability, and data storytelling.
 
-![Deployed here]((https://data-analysis-gauravkumar.streamlit.app/))
+([`Deployed Here`](https://data-analysis-gauravkumar.streamlit.app/))
 
 ---
 

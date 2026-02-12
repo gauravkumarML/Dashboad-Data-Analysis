@@ -1,19 +1,8 @@
----
-title: Executive Dashboard
-emoji: 📊
-colorFrom: blue
-colorTo: indigo
-sdk: streamlit
-sdk_version: 1.36.0
-app_file: streamlit_app.py
-pinned: false
----
-
-# Executive Business Intelligence Dashboard
+# Dashboard Data Analysis
 
 A production-grade analytics application designed to deliver real-time insights into E-commerce performance, subscription metrics, and improved forecasting accuracy. Built with a focus on engineering rigor, scalability, and data storytelling.
 
-![Dashboard Preview](file:///Users/gauravkumar/.gemini/antigravity/brain/7cd6f905-7bf4-4a70-b613-d06ef0025209/.system_generated/click_feedback/click_feedback_1770910177815.png)
+![Deployed here]((https://huggingface.co/spaces/gauravkumarML/Dashboad-Data-Analysis))
 
 ---
 

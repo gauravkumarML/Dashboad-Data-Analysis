@@ -26,3 +26,6 @@ data/processed/
 dist/
 build/
 *.egg-info/
+
+# Local Documentation
+PROJECT_DOCUMENTATION.md

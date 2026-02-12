@@ -1,3 +1,14 @@
+---
+title: Executive Dashboard
+emoji: 📊
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: 1.36.0
+app_file: streamlit_app.py
+pinned: false
+---
+
 # Executive Business Intelligence Dashboard
 
 A production-grade analytics application designed to deliver real-time insights into E-commerce performance, subscription metrics, and improved forecasting accuracy. Built with a focus on engineering rigor, scalability, and data storytelling.

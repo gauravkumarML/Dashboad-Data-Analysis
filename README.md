@@ -44,11 +44,11 @@ graph TD
 
 ## Key Features
 
-### 1. Advanced Financial Analytics
+### 1. Financial Analytics
 - **Revenue & Margin Analysis**: Real-time tracking of Gross Margin (GM%), Cost of Goods Sold (COGS), and overall Revenue.
-- **Subscription Economics**: Deep dive into Monthly Recurring Revenue (MRR), Annual Recurring Revenue (ARR), and Churn Rates.
+- **Subscription Economics**: Insight into Monthly Recurring Revenue (MRR), Annual Recurring Revenue (ARR), and Churn Rates.
 
-### 2. AI-Driven Forecasting
+### 2. Data Driven Forecasting
 - **Predictive Modeling**: Utilizes Scikit-Learn Linear Regression with lag features to project future revenue trends.
 - **Seasonality Detection**: Automatically accounts for monthly seasonality and long-term trend components.
 
@@ -60,7 +60,7 @@ graph TD
 
 ## Deployment Instructions
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker
 The application is fully containerized for consistency across environments.
 
 ```bash
@@ -102,8 +102,4 @@ streamlit run streamlit_app.py
 └── streamlit_app.py     # Application entry point
 ```
 
-## Tech Stack
-- **Frontend**: Streamlit, Plotly
-- **Data Engineering**: Pandas, PyArrow (Parquet)
-- **Machine Learning**: Scikit-Learn
-- **Containerization**: Docker
+
